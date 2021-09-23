@@ -1,4 +1,4 @@
-# Getting Started
+# DigitalOcean Record Updater
 
 ### Reference Documentation
 
