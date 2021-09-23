@@ -1,0 +1,9 @@
+version: '3.1'
+services:
+  dns_updater_ms:
+    container_name: dns_updater_ms
+    build: .
+    restart: always
+    environment:
+      - BEARER_TOKEN=digital_ocean_token
+      - PROJECT_NAME=managed_domain_second_level

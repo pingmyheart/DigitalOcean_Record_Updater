@@ -1,0 +1,11 @@
+config:
+  authentication:
+    bearer-token: ${BEARER_TOKEN:null}
+  project:
+    name: ${PROJECT_NAME:null}
+  public-ip-site-resolver: ipinfo.io/ip # DO NOT UPDATE
+  schedule:
+    update-cron: "0 */5 * * * *"
+spring:
+  application:
+    name: DORecordUpdater-ms
