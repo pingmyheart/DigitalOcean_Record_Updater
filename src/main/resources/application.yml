@@ -14,3 +14,13 @@ spring:
       invert: false
       pixelmode: block
       bitdepth: 8
+
+# TEST ENVIRONMENT CONFIGURATION
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+config:
+  schedule:
+    update-cron: "*/5 * * * * *"
