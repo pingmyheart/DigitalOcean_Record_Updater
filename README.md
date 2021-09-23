@@ -2,7 +2,7 @@
 <h2>Reference Documentation</h2>
 
 <h3>How to Use</h3>
-DigitalOcean updater need two fundamental properties:
+DigitalOcean Record Updater need two fundamental properties:
 <ul>
     <li>DigitalOcean project name</li>
     <li>DigitalOcean bearer token</li>

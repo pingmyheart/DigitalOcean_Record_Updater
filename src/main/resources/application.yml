@@ -9,3 +9,8 @@ config:
 spring:
   application:
     name: DORecordUpdater-ms
+  banner:
+    image:
+      invert: false
+      pixelmode: block
+      bitdepth: 8
