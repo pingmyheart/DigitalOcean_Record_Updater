@@ -8,3 +8,4 @@ services:
       - BEARER_TOKEN=digital_ocean_token
       - PROJECT_NAME=managed_domain_second_level
       - PROJECT_NAMES=managed_domains_second_level
+      - MULTIPROJECT_ENABLED=false

@@ -68,7 +68,7 @@ Taking into example that the DigitalOcean project is *example.com* and domains t
 The generated jar file, configured with previous shown properties, will be executed as below
 
 ```shell
-java -jar DO_Record_Updater-0.0.1-SNAPSHOT.jar arecord brecord crecord.zpippo
+java -jar -Dspring.profiles.active=prod DO_Record_Updater-0.0.1-SNAPSHOT.jar arecord brecord crecord.zpippo
 ```
 
 ### Run in multi-project mode
@@ -114,37 +114,35 @@ to specify the record to the specific project, you will use @ into command line 
 The generated jar file, configured with previous shown properties, will be executed as below
 
 ```shell
-java -jar DO_Record_Updater-0.0.1-SNAPSHOT.jar pippo@example.com paperino@example_second.com paperino.minny@example_second.com
+java -jar -Dspring.profiles.active=prod DO_Record_Updater-0.0.1-SNAPSHOT.jar pippo@example.com paperino@example_second.com paperino.minny@example_second.com
 ```
 
 ## Deploy into Docker
 
 Taking into account that many configurations are similar to [Run in single-project mode](#run-in-single-project-mode)
 and [Run in multi-project mode](#run-in-multi-project-mode), the effective changes that have to be done in container
-environment is to update *docker-compose.yml* file with *BEARER_TOKEN* and *PROJECT_NAME/PROJECT_NAMES* environment
-variables depending on witch mode is going to be deployed, so
+environment is to update *docker-compose.yml* file with 
+* *BEARER_TOKEN*, 
+* *PROJECT_NAME/PROJECT_NAMES*
+* *MULTIPROJECT_ENABLED*
+* 
+environment variables depending on witch mode is going to be deployed, so
 
 * single-project mode &rarr; PROJECT_NAME
 * multi-project mode &rarr; PROJECT_NAMES
 
 The *use-multi-project* property needs to be settled from *application.yml* file as below
 
-```properties
-config:
-    project:
-        use-multi-project:false
-```
-
 It is also necessary to update [Dockerfile](Dockerfile) adding to entrypoint the records to be updated as below
 
 ```shell
-ENTRYPOINT ["java", "-jar", "app.jar", "arecord", "brecord", "crecord.zpippo"]
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "app.jar", "arecord", "brecord", "crecord.zpippo"]
 ```
 
 or, with multi-project settings
 
 ```shell
-ENTRYPOINT ["java", "-jar", "app.jar", "pippo@example.com", "pluto@test.net", "paperino@example.com"]
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "app.jar", "pippo@example.com", "pluto@test.net", "paperino@example.com"]
 ```
 
 To deploy the application use the [deploy.sh](deploy.sh) file that will compile the project and bring up the stack

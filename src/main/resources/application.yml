@@ -4,7 +4,7 @@ config:
   project:
     name: ${PROJECT_NAME:null}
     names: ${PROJECT_NAMES:null}
-    use-multi-project: false
+    use-multi-project: ${MULTIPROJECT_ENABLED:false}
   public-ip-site-resolver: ipinfo.io/ip # DO NOT UPDATE
   schedule:
     update-cron: "0 */5 * * * *"
@@ -16,6 +16,7 @@ spring:
       invert: false
       pixelmode: block
       bitdepth: 8
+      location: classpath:banner.png
 
 # TEST ENVIRONMENT CONFIGURATION
 ---
@@ -26,3 +27,13 @@ spring:
 config:
   schedule:
     update-cron: "*/10 * * * * *"
+
+# PROD ENVIRONMENT CONFIGURATION
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  banner:
+    image:
+      location: classpath:banner_prod.png
