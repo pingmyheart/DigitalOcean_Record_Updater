@@ -14,14 +14,32 @@ Both the properties have to be settled into the <b>application.yml</b> file to l
 <br><br>
 Once the project is compiled, maven will automatically generate <b>target</b> folder with <b>.jar file</b>.<br>
 DigitalOcean Record Updater works with java args passed to main class that represents the domain records to be updated<br>
-Records to be updated must be passed to jar file through command line args like below
+Records to be updated must be passed to jar file through command.<br>
+DigitalOcean Record Updater can work with single project or multi-project by setting the property
 <br><br>
-    <code style="text-align: center">java -jar Snapshot.jar pippo pluto paperino</code>
+<code>config.project.use-multi-project</code>
+<br><br>
+This property is settled to false by default and permit to work with a single project on DigitalOcean. With the property settled to false, use
+the following setting to run the application by passing to jar file the domain to be updated
+<br><br>
+    <code>java -jar Snapshot.jar pippo pluto paperino</code>
 <br><br>
 Obviously, if containerized, the domains have to be passed into <b>Dockerfile</b> like below
 <br><br>
-    <code style="text-align: center">ENTRYPOINT ["java", "-jar", "app.jar", "pippo", "pluto", "paperino"]</code>
-<br>
+    <code>ENTRYPOINT ["java", "-jar", "app.jar", "pippo", "pluto", "paperino"]</code>
+<br><br>
+By using the multi-project setting, you need to put into <b>application.yml</b> the multi-domain property and set the property
+<br><br>
+<code>config.project.names</code>
+<br><br>
+like below
+<br><br>
+<code>${PROJECT_NAMES:example.com, test.net}</code>
+<br><br>
+And pass to the jar file the related domain like below
+<br><br>
+<code>java -jar Snapshot.jar pippo@example.com pluto@test.net paperino@example.com</code>
+<br><br>
 <h3>Important</h3>
 If the project name is <b>example.com</b> and the record to be updated is <b>pippo.example.com</b>, the argument to be passed to 
 jar file il <b>pippo</b>.<br>

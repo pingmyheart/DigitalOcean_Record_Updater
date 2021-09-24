@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @Slf4j
@@ -29,26 +30,27 @@ public class DORecordUpdaterImpl implements DORecordUpdater {
     @Value("${config.authentication.bearer-token}")
     String bearerToken;
 
-    @Value("${config.project.name}")
-    String baseDomain;
-
     @Override
-    public RetrieveDomainsResponseDTO getAllDomains() {
+    public Optional<RetrieveDomainsResponseDTO> getAllDomains(String base) {
         String response;
         List<GenericDomainResponseDTO> genericDomainResponseDTOList = new ArrayList<>();
         int index = 1;
         do {
-            response = doRestInterface.getPagedDomains(MessageFormat.format("Bearer {0}", bearerToken),
-                    baseDomain,
-                    index,
-                    20);
+            try{
+                response = doRestInterface.getPagedDomains(MessageFormat.format("Bearer {0}", bearerToken),
+                        base,
+                        index,
+                        20);
+            }catch (Exception e){
+                return null;
+            }
             genericDomainResponseDTOList.addAll(doRecordUpdaterUtils.retrieveDomainsFromResponse(response));
             index++;
         } while (Boolean.TRUE.equals(hasNext(response)));
 
-        return RetrieveDomainsResponseDTO.builder()
+        return Optional.ofNullable(RetrieveDomainsResponseDTO.builder()
                 .domainRecords(genericDomainResponseDTOList)
-                .build();
+                .build());
     }
 
     @SneakyThrows
@@ -58,10 +60,10 @@ public class DORecordUpdaterImpl implements DORecordUpdater {
     }
 
     @Override
-    public Boolean updateRecord(String recordId, UpdateRecordRequestDTO updateRecordRequestDTO) {
+    public Boolean updateRecord(String recordId, UpdateRecordRequestDTO updateRecordRequestDTO, String base) {
         try {
             doRestInterface.updateRecord(MessageFormat.format("Bearer {0}", bearerToken),
-                    baseDomain,
+                    base,
                     recordId,
                     updateRecordRequestDTO);
             return true;

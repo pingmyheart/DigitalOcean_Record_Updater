@@ -3,6 +3,8 @@ config:
     bearer-token: ${BEARER_TOKEN:null}
   project:
     name: ${PROJECT_NAME:null}
+    names: ${PROJECT_NAMES:null}
+    use-multi-project: false
   public-ip-site-resolver: ipinfo.io/ip # DO NOT UPDATE
   schedule:
     update-cron: "0 */5 * * * *"
@@ -23,4 +25,4 @@ spring:
       on-profile: test
 config:
   schedule:
-    update-cron: "*/5 * * * * *"
+    update-cron: "*/10 * * * * *"

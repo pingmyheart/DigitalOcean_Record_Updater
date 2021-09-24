@@ -3,11 +3,13 @@ package com.russi.do_record_updater.component;
 import com.russi.do_record_updater.dto.request.UpdateRecordRequestDTO;
 import com.russi.do_record_updater.dto.response.RetrieveDomainsResponseDTO;
 
+import java.util.Optional;
+
 public interface DORecordUpdater {
 
-    RetrieveDomainsResponseDTO getAllDomains();
+    Optional<RetrieveDomainsResponseDTO> getAllDomains(String base);
 
     Boolean hasNext(String response);
 
-    Boolean updateRecord(String recordId, UpdateRecordRequestDTO updateRecordRequestDTO);
+    Boolean updateRecord(String recordId, UpdateRecordRequestDTO updateRecordRequestDTO, String base);
 }

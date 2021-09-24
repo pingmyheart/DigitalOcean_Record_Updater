@@ -10,6 +10,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
 @Configuration
 @ConfigurationProperties(prefix = "config")
@@ -28,25 +29,32 @@ public class DOCustomPropertiesConfiguration {
 
     @Getter
     @Setter
-    private static class Authentication {
+    public static class Authentication {
 
         private String bearerToken;
     }
 
     @Getter
     @Setter
-    private static class Project {
+    public static class Project {
         private String name;
+        private List<String> names;
+        private Boolean useMultiProject = Boolean.FALSE;
     }
 
     @Getter
     @Setter
-    private static class Schedule {
+    public static class Schedule {
         private String updateCron;
     }
 
     @PostConstruct
     void validate() {
+        project.getNames().forEach(log::warn);
+        if(project.getNames().contains("null")){
+            log.error("Invalid domains name");
+            SpringApplication.exit(context, () -> 0);
+        }
         authentication.setBearerToken(authentication.getBearerToken()
                 .trim());
         if (authentication.getBearerToken()
@@ -59,10 +67,20 @@ public class DOCustomPropertiesConfiguration {
             log.error("Invalid Bearer Token");
             SpringApplication.exit(context, () -> 0);
         }
-        if (!project.getName()
-                .contains(".")) {
-            log.error("Invalid domain name");
-            SpringApplication.exit(context, () -> 0);
+        if (project.getUseMultiProject()) {
+            project.getNames().forEach(domain -> {
+                if (!domain.contains(".")) {
+                    log.error("Invalid domain names");
+                    SpringApplication.exit(context, () -> 0);
+                }
+            });
+        } else {
+            if (!project.getName()
+                    .contains(".")) {
+                log.error("Invalid domain name");
+                SpringApplication.exit(context, () -> 0);
+            }
         }
+
     }
 }
