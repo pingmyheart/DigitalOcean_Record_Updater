@@ -48,8 +48,7 @@ public class DODomainUpdaterScheduler {
         log.info(MessageFormat.format("Current ip is {0}", ipAddress));
         if (Boolean.FALSE.equals(properties.getProject().getUseMultiProject())) {
             Optional.ofNullable(doRecordUpdater.getAllDomains(baseDomain))
-                    .ifPresentOrElse(obj -> obj.get()
-                                    .getDomainRecords()
+                    .ifPresentOrElse(obj -> obj.getDomainRecords()
                                     .stream()
                                     .filter(o -> o.getType().equals("A"))
                                     .collect(Collectors.toList())
@@ -63,8 +62,7 @@ public class DODomainUpdaterScheduler {
                     .forEach(domain -> {
                         Optional.ofNullable(doRecordUpdater.getAllDomains(domain))
                                 .ifPresentOrElse(obj -> {
-                                            obj.get()
-                                                    .getDomainRecords()
+                                            obj.getDomainRecords()
                                                     .stream()
                                                     .filter(o -> o.getType().equals("A"))
                                                     .collect(Collectors.toList())

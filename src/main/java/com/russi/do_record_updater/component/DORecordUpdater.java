@@ -3,11 +3,9 @@ package com.russi.do_record_updater.component;
 import com.russi.do_record_updater.dto.request.UpdateRecordRequestDTO;
 import com.russi.do_record_updater.dto.response.RetrieveDomainsResponseDTO;
 
-import java.util.Optional;
-
 public interface DORecordUpdater {
 
-    Optional<RetrieveDomainsResponseDTO> getAllDomains(String base);
+    RetrieveDomainsResponseDTO getAllDomains(String base);
 
     Boolean hasNext(String response);
 

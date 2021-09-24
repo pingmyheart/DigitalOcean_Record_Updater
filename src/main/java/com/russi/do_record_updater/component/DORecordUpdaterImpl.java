@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Component
 @Slf4j
@@ -31,26 +30,26 @@ public class DORecordUpdaterImpl implements DORecordUpdater {
     String bearerToken;
 
     @Override
-    public Optional<RetrieveDomainsResponseDTO> getAllDomains(String base) {
+    public RetrieveDomainsResponseDTO getAllDomains(String base) {
         String response;
         List<GenericDomainResponseDTO> genericDomainResponseDTOList = new ArrayList<>();
         int index = 1;
         do {
-            try{
+            try {
                 response = doRestInterface.getPagedDomains(MessageFormat.format("Bearer {0}", bearerToken),
                         base,
                         index,
                         20);
-            }catch (Exception e){
+            } catch (Exception e) {
                 return null;
             }
             genericDomainResponseDTOList.addAll(doRecordUpdaterUtils.retrieveDomainsFromResponse(response));
             index++;
         } while (Boolean.TRUE.equals(hasNext(response)));
 
-        return Optional.ofNullable(RetrieveDomainsResponseDTO.builder()
+        return RetrieveDomainsResponseDTO.builder()
                 .domainRecords(genericDomainResponseDTOList)
-                .build());
+                .build();
     }
 
     @SneakyThrows
