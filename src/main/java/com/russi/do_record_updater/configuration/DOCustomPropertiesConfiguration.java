@@ -51,36 +51,44 @@ public class DOCustomPropertiesConfiguration {
     @PostConstruct
     void validate() {
         project.getNames().forEach(log::warn);
-        if(project.getNames().contains("null")){
-            log.error("Invalid domains name");
-            SpringApplication.exit(context, () -> 0);
-        }
         authentication.setBearerToken(authentication.getBearerToken()
                 .trim());
         if (authentication.getBearerToken()
                 .contains("Bearer")) {
             log.error("Bearer token must not contains Bearer prefix");
-            SpringApplication.exit(context, () -> 0);
+            shutdown();
         }
         if (authentication.getBearerToken()
                 .equalsIgnoreCase("null")) {
             log.error("Invalid Bearer Token");
-            SpringApplication.exit(context, () -> 0);
+            shutdown();
         }
         if (project.getUseMultiProject()) {
+            if (project.getNames().contains("null")) {
+                log.error("Invalid domains name");
+                shutdown();
+            }
             project.getNames().forEach(domain -> {
                 if (!domain.contains(".")) {
                     log.error("Invalid domain names");
-                    SpringApplication.exit(context, () -> 0);
+                    shutdown();
                 }
             });
         } else {
             if (!project.getName()
                     .contains(".")) {
                 log.error("Invalid domain name");
-                SpringApplication.exit(context, () -> 0);
+                shutdown();
             }
         }
 
+    }
+
+    private void shutdown() {
+        try {
+            SpringApplication.exit(context, () -> 0);
+        } catch (Exception e) {
+            log.error("Thread Exception");
+        }
     }
 }
