@@ -5,7 +5,7 @@
 
 ## Requirements
 
-For Building and Running hte application you need:
+For Building and Running the application you need:
 
 * [AmazonCorretto11](https://docs.aws.amazon.com/corretto/latest/corretto-11-ug/downloads-list.html)
 * [Maven 3+](https://archive.apache.org/dist/maven/maven-3/)
