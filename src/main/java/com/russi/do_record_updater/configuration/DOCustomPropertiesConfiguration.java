@@ -50,7 +50,6 @@ public class DOCustomPropertiesConfiguration {
 
     @PostConstruct
     void validate() {
-        project.getNames().forEach(log::warn);
         authentication.setBearerToken(authentication.getBearerToken()
                 .trim());
         if (authentication.getBearerToken()
@@ -81,7 +80,6 @@ public class DOCustomPropertiesConfiguration {
                 shutdown();
             }
         }
-
     }
 
     private void shutdown() {
