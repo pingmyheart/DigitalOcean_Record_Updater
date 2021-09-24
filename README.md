@@ -125,7 +125,7 @@ environment is to update *docker-compose.yml* file with
 * *BEARER_TOKEN*, 
 * *PROJECT_NAME/PROJECT_NAMES*
 * *MULTIPROJECT_ENABLED*
-* 
+
 environment variables depending on witch mode is going to be deployed, so
 
 * single-project mode &rarr; PROJECT_NAME
