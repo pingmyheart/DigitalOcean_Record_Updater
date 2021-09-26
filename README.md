@@ -131,18 +131,42 @@ environment variables depending on witch mode is going to be deployed, so
 * single-project mode &rarr; PROJECT_NAME
 * multi-project mode &rarr; PROJECT_NAMES
 
-The *use-multi-project* property needs to be settled from *application.yml* file as below
+To deploy in single-project mode, the docker-compose file will look like following
 
-It is also necessary to update [Dockerfile](Dockerfile) adding to entrypoint the records to be updated as below
-
-```shell
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "app.jar", "arecord", "brecord", "crecord.zpippo"]
+```properties
+version: '3.1'
+services:
+  dns_updater_ms:
+    container_name: digitalocean_record_updater_ms
+    build: .
+    restart: always
+    environment:
+      - BEARER_TOKEN=digital_ocean_token
+      - PROJECT_NAME=example.com
+      - MULTIPROJECT_ENABLED=false
+    command:
+      - pippo
+      - pippo.pluto
 ```
 
-or, with multi-project settings
+or, in multi-project mode
 
-```shell
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "app.jar", "pippo@example.com", "pluto@test.net", "paperino@example.com"]
+```properties
+version: '3.1'
+services:
+  dns_updater_ms:
+    container_name: digitalocean_record_updater_ms
+    build: .
+    restart: always
+    environment:
+      - BEARER_TOKEN=digital_ocean_token
+      - PROJECT_NAMES=example.com, example_second.com
+      - MULTIPROJECT_ENABLED=true
+    command:
+      - pippo@example.com
+      - pippo.pluto@example.com
+      - paperino@example_second.com
+      - paperino.minny@example_second.com
 ```
 
 To deploy the application use the [deploy.sh](deploy.sh) file that will compile the project and bring up the stack
