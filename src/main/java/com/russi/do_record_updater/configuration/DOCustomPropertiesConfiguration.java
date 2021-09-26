@@ -1,10 +1,10 @@
 package com.russi.do_record_updater.configuration;
 
+import com.russi.do_record_updater.DORecordUpdaterUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +21,9 @@ public class DOCustomPropertiesConfiguration {
 
     @Autowired
     private ApplicationContext context;
+
+    @Autowired
+    DORecordUpdaterUtils utils;
 
     private Authentication authentication;
     private Project project;
@@ -55,38 +58,34 @@ public class DOCustomPropertiesConfiguration {
         if (authentication.getBearerToken()
                 .contains("Bearer")) {
             log.error("Bearer token must not contains Bearer prefix");
-            shutdown();
+            utils.shutdown();
         }
         if (authentication.getBearerToken()
                 .equalsIgnoreCase("null")) {
             log.error("Invalid Bearer Token");
-            shutdown();
+            utils.shutdown();
         }
         if (project.getUseMultiProject()) {
+            log.info("Running in multi project mode");
             if (project.getNames().contains("null")) {
-                log.error("Invalid domains name");
-                shutdown();
+                log.error("multi-project mode | domains contains \"null\" value");
+                utils.shutdown();
             }
             project.getNames().forEach(domain -> {
                 if (!domain.contains(".")) {
-                    log.error("Invalid domain names");
-                    shutdown();
+                    log.error("multi-project mode | project is not a valid resource");
+                    utils.shutdown();
                 }
             });
         } else {
+            log.info("Running in single project mode");
             if (!project.getName()
                     .contains(".")) {
-                log.error("Invalid domain name");
-                shutdown();
+                log.error("single-project mode | project is not a valid resource");
+                utils.shutdown();
             }
         }
     }
 
-    private void shutdown() {
-        try {
-            SpringApplication.exit(context, () -> 0);
-        } catch (Exception e) {
-            log.error("Thread Exception");
-        }
-    }
+
 }

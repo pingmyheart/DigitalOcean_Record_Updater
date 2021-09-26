@@ -8,6 +8,8 @@ config:
   public-ip-site-resolver: ipinfo.io/ip # DO NOT UPDATE
   schedule:
     update-cron: "0 */5 * * * *"
+server:
+  shutdown: graceful
 spring:
   application:
     name: DORecordUpdater-ms

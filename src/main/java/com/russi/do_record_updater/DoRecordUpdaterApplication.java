@@ -21,5 +21,6 @@ public class DoRecordUpdaterApplication {
             log.info(MessageFormat.format("domain to be updated -> {0}", domain));
             Constants.domains.add(domain);
         });
+        Constants.checkDomainsConfiguration();
     }
 }

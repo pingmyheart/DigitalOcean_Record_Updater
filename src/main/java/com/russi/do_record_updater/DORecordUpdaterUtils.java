@@ -6,6 +6,8 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -17,6 +19,9 @@ public class DORecordUpdaterUtils {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Autowired
+    ApplicationContext context;
 
     @SneakyThrows
     public List<GenericDomainResponseDTO> retrieveDomainsFromResponse(String response) {
@@ -41,5 +46,13 @@ public class DORecordUpdaterUtils {
                 .ttl(obj.getInt("ttl"))
                 .type(obj.getString("type"))
                 .build();
+    }
+
+    public  void shutdown() {
+        try {
+            SpringApplication.exit(context, () -> 0);
+        } catch (Exception e) {
+            log.error("Thread Exception");
+        }
     }
 }
