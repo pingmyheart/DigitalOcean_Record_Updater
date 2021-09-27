@@ -23,7 +23,7 @@ function check_commands {
   fi
 
   if ! docker -v COMMAND &>/dev/null; then
-    echo -e "git command could not be found"
+    echo -e "docker command could not be found"
     exit
   fi
 }
