@@ -58,7 +58,7 @@ into
 mvn -U clean package install -DskipTests
 ```
 
-The command will produce *DO_Record_Updater-0.0.1-SNAPSHOT.jar* file that will be used to run the application.  
+The command will produce *DO_Record_Updater-version.jar* file that will be used to run the application.  
 Taking into example that the DigitalOcean project is *example.com* and domains to be updated are
 
 * arecord.example.com
