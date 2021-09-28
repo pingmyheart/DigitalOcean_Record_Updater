@@ -68,7 +68,7 @@ Taking into example that the DigitalOcean project is *example.com* and domains t
 The generated jar file, configured with previous shown properties, will be executed as below
 
 ```shell
-java -jar -Dspring.profiles.active=prod DO_Record_Updater-0.0.1-SNAPSHOT.jar arecord brecord crecord.zpippo
+java -jar -Dspring.profiles.active=prod DO_Record_Updater-version.jar arecord brecord crecord.zpippo
 ```
 
 ### Run in multi-project mode
@@ -94,7 +94,7 @@ into
 mvn -U clean package install -DskipTests
 ```
 
-The command will produce *DO_Record_Updater-0.0.1-SNAPSHOT.jar* file that will be used to run the application. Working
+The command will produce *DO_Record_Updater-version.jar* file that will be used to run the application. Working
 on multi-project mode, it is necessary to specify the specific record to witch project is linked. So, if whe have the
 following situation
 
@@ -114,7 +114,7 @@ to specify the record to the specific project, you will use @ into command line 
 The generated jar file, configured with previous shown properties, will be executed as below
 
 ```shell
-java -jar -Dspring.profiles.active=prod DO_Record_Updater-0.0.1-SNAPSHOT.jar pippo@example.com paperino@example_second.com paperino.minny@example_second.com
+java -jar -Dspring.profiles.active=prod DO_Record_Updater-version.jar pippo@example.com paperino@example_second.com paperino.minny@example_second.com
 ```
 
 ## Deploy into Docker
