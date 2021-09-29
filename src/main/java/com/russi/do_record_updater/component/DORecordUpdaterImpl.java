@@ -61,7 +61,7 @@ public class DORecordUpdaterImpl implements DORecordUpdater {
     @SneakyThrows
     @Override
     public Boolean hasNext(String response) {
-        return new JSONObject(response).getJSONObject("links").toString().contains("next");
+        return new JSONObject(response).getJSONObject("links").toString().contains("\"next\"");
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.russi.do_record_updater.function;
 
 import feign.FeignException;
 import lombok.SneakyThrows;
+import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
@@ -20,9 +21,14 @@ public class FeignExceptionMessageConverterFunction implements Function<FeignExc
                         .toString()
                         .replaceAll("(?m)^\\s+$", "")
                         .trim()));
-        JSONObject response = new JSONObject(message.get());
+        JSONObject response;
+        try {
+            response = new JSONObject(message.get());
+        } catch (JSONException e) {
+            return "Error thrown while parsing feign exception response body";
+        }
         if (response.toString()
-                .contains("message")) {
+                .contains("\"message\"")) {
             return response.getString("message");
         }
         return null;
