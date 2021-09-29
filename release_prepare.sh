@@ -19,8 +19,11 @@ git checkout develop
 git checkout -b ${branch} develop
 git push -u origin ${branch}
 #merge develop on master
+echo -e "\tcheckout master"
 git checkout master
+echo -e "\tmerge develop into master"
 git merge develop
+echo -e "\tpush to master"
 git push origin master
 git checkout ${branch}
 #build docker image and push
