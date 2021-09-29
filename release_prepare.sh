@@ -26,6 +26,6 @@ git checkout ${branch}
 #build docker image and push
 ./dockerhub_deploy.sh
 #return on develop
-git cherckout develop
+git checkout develop
 next_release="${release%.*}.$((${release##*.}+1))"
 mvn versions:set versions:commit -DnewVersion="${next_release}"
