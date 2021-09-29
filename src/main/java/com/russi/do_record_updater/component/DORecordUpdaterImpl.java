@@ -4,7 +4,9 @@ import com.russi.do_record_updater.DORecordUpdaterUtils;
 import com.russi.do_record_updater.dto.request.UpdateRecordRequestDTO;
 import com.russi.do_record_updater.dto.response.GenericDomainResponseDTO;
 import com.russi.do_record_updater.dto.response.RetrieveDomainsResponseDTO;
+import com.russi.do_record_updater.function.FeignExceptionMessageConverterFunction;
 import com.russi.do_record_updater.interfaces.DORestInterface;
+import feign.FeignException;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -40,8 +42,11 @@ public class DORecordUpdaterImpl implements DORecordUpdater {
                         base,
                         index,
                         20);
+            } catch (FeignException feignException) {
+                log.error(new FeignExceptionMessageConverterFunction()
+                        .apply(feignException));
+                return null;
             } catch (Exception e) {
-                log.error(e.getMessage());
                 return null;
             }
             genericDomainResponseDTOList.addAll(doRecordUpdaterUtils.retrieveDomainsFromResponse(response));
