@@ -24,14 +24,19 @@ public class Constants {
     public static List<String> domains = new ArrayList<>();
 
     public static void checkDomainsConfiguration() {
-        if (Boolean.TRUE.equals(configuration.getProject()
-                .getUseMultiProject())) {
-            domains.forEach(d -> {
-                if (!d.contains("@")) {
-                    log.error("multi-project mode | domains need to have @ sign to specify project");
-                    utils.shutdown();
-                }
-            });
+        if(!domains.isEmpty()){
+            if (Boolean.TRUE.equals(configuration.getProject()
+                    .getUseMultiProject())) {
+                domains.forEach(d -> {
+                    if (!d.contains("@")) {
+                        log.error("multi-project mode | domains need to have @ sign to specify project");
+                        utils.shutdown();
+                    }
+                });
+            }
+        }else{
+            log.error("Domain args can not be empty");
+            utils.shutdown();
         }
     }
 }
