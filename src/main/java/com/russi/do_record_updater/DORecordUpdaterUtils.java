@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 @Component
 @Slf4j
@@ -27,11 +28,12 @@ public class DORecordUpdaterUtils {
     public List<GenericDomainResponseDTO> retrieveDomainsFromResponse(String response) {
         List<GenericDomainResponseDTO> genericDomainResponseDTOList = new ArrayList<>();
         JSONObject obj = new JSONObject(response);
-        for (int i = 0; i < obj.getJSONArray("domain_records").length(); i++) {
-            genericDomainResponseDTOList.add(convertToDomain(new JSONObject(obj.getJSONArray("domain_records")
-                    .get(i)
-                    .toString()).toString()));
-        }
+        IntStream.range(0, obj.getJSONArray("domain_records").length())
+                .forEach(i -> {
+                    genericDomainResponseDTOList.add(convertToDomain(new JSONObject(obj.getJSONArray("domain_records")
+                            .get(i)
+                            .toString()).toString()));
+                });
         return genericDomainResponseDTOList;
     }
 
@@ -48,7 +50,7 @@ public class DORecordUpdaterUtils {
                 .build();
     }
 
-    public  void shutdown() {
+    public void shutdown() {
         try {
             SpringApplication.exit(context, () -> 0);
         } catch (Exception e) {
