@@ -19,11 +19,8 @@ git checkout develop
 git checkout -b ${branch} develop
 git push -u origin ${branch}
 #merge develop on master
-echo -e "\tcheckout master"
 git checkout master
-echo -e "\tmerge develop into master"
 git merge develop --no-edit
-echo -e "\tpush to master"
 git push origin master
 git checkout ${branch}
 #build docker image and push
@@ -32,3 +29,6 @@ git checkout ${branch}
 git checkout develop
 next_release="${release%.*}.$((${release##*.}+1))"
 mvn versions:set versions:commit -DnewVersion="${next_release}"
+git add pom.xml
+git commit -m "[UPDATE] pom.xml project version from v${release} to v${next_release}"
+git push origin develop

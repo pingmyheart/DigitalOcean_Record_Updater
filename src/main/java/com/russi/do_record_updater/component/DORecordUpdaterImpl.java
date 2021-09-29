@@ -41,6 +41,7 @@ public class DORecordUpdaterImpl implements DORecordUpdater {
                         index,
                         20);
             } catch (Exception e) {
+                log.error(e.getMessage());
                 return null;
             }
             genericDomainResponseDTOList.addAll(doRecordUpdaterUtils.retrieveDomainsFromResponse(response));
