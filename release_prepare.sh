@@ -22,7 +22,7 @@ git push -u origin ${branch}
 echo -e "\tcheckout master"
 git checkout master
 echo -e "\tmerge develop into master"
-git merge develop
+git merge develop --no-edit
 echo -e "\tpush to master"
 git push origin master
 git checkout ${branch}
