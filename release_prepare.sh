@@ -20,7 +20,7 @@ git checkout -b ${branch} develop
 git push -u origin ${branch}
 #merge develop on master
 echo -e "\tcheckout master"
-git checkout master
+git checkout master --no-edit
 echo -e "\tmerge develop into master"
 git merge develop
 echo -e "\tpush to master"
