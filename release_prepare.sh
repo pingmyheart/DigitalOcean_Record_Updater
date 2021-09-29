@@ -5,7 +5,7 @@ echo -e ${branch}
 
 git checkout develop
 git checkout -b ${branch} develop
-git push -u origin release/v1.0.0
+git push -u origin ${branch}
 #merge develop on master
 git checkout master
 git merge develop
