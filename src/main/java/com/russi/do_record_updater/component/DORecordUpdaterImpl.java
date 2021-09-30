@@ -1,13 +1,14 @@
 package com.russi.do_record_updater.component;
 
-import com.russi.do_record_updater.DORecordUpdaterUtils;
 import com.russi.do_record_updater.dto.request.UpdateRecordRequestDTO;
 import com.russi.do_record_updater.dto.response.GenericDomainResponseDTO;
 import com.russi.do_record_updater.dto.response.RetrieveDomainsResponseDTO;
+import com.russi.do_record_updater.function.FeignExceptionMessageConverterFunction;
 import com.russi.do_record_updater.interfaces.DORestInterface;
-import lombok.SneakyThrows;
+import com.russi.do_record_updater.util.DOJsonUtils;
+import com.russi.do_record_updater.util.DORecordUpdaterUtils;
+import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -20,14 +21,22 @@ import java.util.List;
 @Slf4j
 public class DORecordUpdaterImpl implements DORecordUpdater {
 
-    @Autowired
     DORestInterface doRestInterface;
 
-    @Autowired
     DORecordUpdaterUtils doRecordUpdaterUtils;
+
+    DOJsonUtils jsonUtils;
 
     @Value("${config.authentication.bearer-token}")
     String bearerToken;
+
+    public DORecordUpdaterImpl(@Autowired DORestInterface doRestInterface,
+                                @Autowired DORecordUpdaterUtils doRecordUpdaterUtils,
+                                @Autowired DOJsonUtils jsonUtils) {
+        this.doRestInterface = doRestInterface;
+        this.doRecordUpdaterUtils = doRecordUpdaterUtils;
+        this.jsonUtils = jsonUtils;
+    }
 
     @Override
     public RetrieveDomainsResponseDTO getAllDomains(String base) {
@@ -40,22 +49,20 @@ public class DORecordUpdaterImpl implements DORecordUpdater {
                         base,
                         index,
                         20);
+            } catch (FeignException feignException) {
+                log.error(new FeignExceptionMessageConverterFunction()
+                        .apply(feignException));
+                return null;
             } catch (Exception e) {
                 return null;
             }
-            genericDomainResponseDTOList.addAll(doRecordUpdaterUtils.retrieveDomainsFromResponse(response));
+            genericDomainResponseDTOList.addAll(doRecordUpdaterUtils.parseDomainsFromResponse(response));
             index++;
-        } while (Boolean.TRUE.equals(hasNext(response)));
+        } while (Boolean.TRUE.equals(jsonUtils.hasNext(response)));
 
         return RetrieveDomainsResponseDTO.builder()
                 .domainRecords(genericDomainResponseDTOList)
                 .build();
-    }
-
-    @SneakyThrows
-    @Override
-    public Boolean hasNext(String response) {
-        return new JSONObject(response).getJSONObject("links").toString().contains("next");
     }
 
     @Override

@@ -39,3 +39,7 @@ spring:
   banner:
     image:
       location: classpath:banner_prod.png
+  devtools:
+    livereload:
+      enabled: false
+    add-properties: false

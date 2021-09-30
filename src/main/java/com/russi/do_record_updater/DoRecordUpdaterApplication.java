@@ -1,5 +1,6 @@
 package com.russi.do_record_updater;
 
+import com.russi.do_record_updater.util.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

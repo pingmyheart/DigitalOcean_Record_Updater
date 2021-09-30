@@ -1,4 +1,4 @@
-package com.russi.do_record_updater;
+package com.russi.do_record_updater.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.russi.do_record_updater.dto.response.GenericDomainResponseDTO;
@@ -18,14 +18,18 @@ import java.util.stream.IntStream;
 @Slf4j
 public class DORecordUpdaterUtils {
 
-    @Autowired
     ObjectMapper objectMapper;
 
-    @Autowired
     ApplicationContext context;
 
+    public DORecordUpdaterUtils(@Autowired ObjectMapper objectMapper,
+                                 @Autowired ApplicationContext context) {
+        this.objectMapper = objectMapper;
+        this.context = context;
+    }
+
     @SneakyThrows
-    public List<GenericDomainResponseDTO> retrieveDomainsFromResponse(String response) {
+    public List<GenericDomainResponseDTO> parseDomainsFromResponse(String response) {
         List<GenericDomainResponseDTO> genericDomainResponseDTOList = new ArrayList<>();
         JSONObject obj = new JSONObject(response);
         IntStream.range(0, obj.getJSONArray("domain_records").length())
