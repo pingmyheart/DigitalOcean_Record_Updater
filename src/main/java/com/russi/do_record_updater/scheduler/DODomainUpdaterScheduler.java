@@ -1,33 +1,28 @@
 package com.russi.do_record_updater.scheduler;
 
-import com.russi.do_record_updater.Constants;
 import com.russi.do_record_updater.component.DORecordUpdaterImpl;
 import com.russi.do_record_updater.configuration.DOCustomPropertiesConfiguration;
 import com.russi.do_record_updater.dto.request.UpdateRecordRequestDTO;
 import com.russi.do_record_updater.dto.response.GenericDomainResponseDTO;
-import com.russi.do_record_updater.interfaces.IpInfoInterface;
+import com.russi.do_record_updater.util.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.text.MessageFormat;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.russi.do_record_updater.util.Constants.ipAddress;
 
 @Component
 @Slf4j
 public class DODomainUpdaterScheduler {
 
-    @Autowired
-    IpInfoInterface ipInfoInterface;
-
-    @Autowired
     DORecordUpdaterImpl doRecordUpdater;
 
-    @Autowired
     DOCustomPropertiesConfiguration properties;
 
     @Value("${config.authentication.bearer-token}")
@@ -36,16 +31,14 @@ public class DODomainUpdaterScheduler {
     @Value("${config.project.name}")
     String baseDomain;
 
-    String ipAddress;
-
-    @PostConstruct
-    void init() {
-        ipAddress = ipInfoInterface.getIp();
+    public DODomainUpdaterScheduler(@Autowired DORecordUpdaterImpl doRecordUpdater,
+                                     @Autowired DOCustomPropertiesConfiguration properties) {
+        this.doRecordUpdater = doRecordUpdater;
+        this.properties = properties;
     }
 
     @Scheduled(cron = "${config.schedule.update-cron}")
     void scheduledUpdateRecord() {
-        log.info(MessageFormat.format("Current ip is {0}", ipAddress));
         if (Boolean.FALSE.equals(properties.getProject().getUseMultiProject())) {
             Optional.ofNullable(doRecordUpdater.getAllDomains(baseDomain))
                     .ifPresentOrElse(obj -> obj.getDomainRecords()
