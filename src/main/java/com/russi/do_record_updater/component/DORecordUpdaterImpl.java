@@ -31,8 +31,8 @@ public class DORecordUpdaterImpl implements DORecordUpdater {
     String bearerToken;
 
     public DORecordUpdaterImpl(@Autowired DORestInterface doRestInterface,
-                                @Autowired DORecordUpdaterUtils doRecordUpdaterUtils,
-                                @Autowired DOJsonUtils jsonUtils) {
+                               @Autowired DORecordUpdaterUtils doRecordUpdaterUtils,
+                               @Autowired DOJsonUtils jsonUtils) {
         this.doRestInterface = doRestInterface;
         this.doRecordUpdaterUtils = doRecordUpdaterUtils;
         this.jsonUtils = jsonUtils;
