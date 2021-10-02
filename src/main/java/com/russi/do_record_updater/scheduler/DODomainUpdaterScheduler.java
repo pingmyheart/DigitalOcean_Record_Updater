@@ -32,7 +32,7 @@ public class DODomainUpdaterScheduler {
     String baseDomain;
 
     public DODomainUpdaterScheduler(@Autowired DORecordUpdaterImpl doRecordUpdater,
-                                     @Autowired DOCustomPropertiesConfiguration properties) {
+                                    @Autowired DOCustomPropertiesConfiguration properties) {
         this.doRecordUpdater = doRecordUpdater;
         this.properties = properties;
     }
@@ -45,38 +45,28 @@ public class DODomainUpdaterScheduler {
                                     .stream()
                                     .filter(o -> o.getType().equals("A"))
                                     .collect(Collectors.toList())
-                                    .forEach(e -> {
-                                        checkAndUpdate(e, baseDomain, e.getName());
-                                    }),
+                                    .forEach(e -> checkAndUpdate(e, baseDomain, e.getName())),
                             () -> log.error("Error while retrieving records"));
         } else {
             properties.getProject()
                     .getNames()
-                    .forEach(domain -> {
-                        Optional.ofNullable(doRecordUpdater.getAllDomains(domain))
-                                .ifPresentOrElse(obj -> {
-                                            obj.getDomainRecords()
-                                                    .stream()
-                                                    .filter(o -> o.getType().equals("A"))
-                                                    .collect(Collectors.toList())
-                                                    .forEach(e -> {
-                                                        checkAndUpdate(e, domain, e.getName(), domain);
-                                                    });
-                                        },
-                                        () -> {
-                                            log.error(MessageFormat.format("Error while retrieving domain records for {0}", domain));
-                                        });
-                    });
+                    .forEach(domain -> Optional.ofNullable(doRecordUpdater.getAllDomains(domain))
+                            .ifPresentOrElse(obj -> obj.getDomainRecords()
+                                            .stream()
+                                            .filter(o -> o.getType().equals("A"))
+                                            .collect(Collectors.toList())
+                                            .forEach(e -> checkAndUpdate(e, domain, e.getName(), domain)),
+                                    () -> log.error(MessageFormat.format("Error while retrieving domain records for {0}", domain))));
         }
     }
 
     private void checkAndUpdate(GenericDomainResponseDTO responseDTO, String domain, String... args) {
         if (Boolean.TRUE.equals(properties.getProject().getUseMultiProject())) {
-            if (Constants.domains.contains(MessageFormat.format("{0}@{1}", args))) {
+            if (Constants.domains.contains(MessageFormat.format("{0}@{1}", args[0], args[1]))) {
                 update(responseDTO, domain);
             }
         } else {
-            if (Constants.domains.contains(MessageFormat.format("{0}", args))) {
+            if (Constants.domains.contains(MessageFormat.format("{0}", args[0]))) {
                 update(responseDTO, domain);
             }
         }

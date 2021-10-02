@@ -20,7 +20,7 @@ going to be deployed.
 Basically, DigitalOcean Record Updater works
 with [DigitalOcean API](https://docs.digitalocean.com/reference/api/api-reference/)
 to update **type A DNS records** retrieving the current public ip address and updating it to a set of domains passed to
-the application.
+the application through a scheduled cron settled into **application.yml** file.
 
 ## How it works
 
@@ -79,10 +79,12 @@ Bearer Token as following
 
 ```properties
 config:
-    authentication:
-        bearer-token:digital_ocean_token
-    project:
-        names:example.com, example_second.com
+  authentication:
+    bearer-token:digital_ocean_token
+  project:
+    names:
+      - example.com
+      - example_second.com
 ```
 
 If those fields are not settled, the application will interrupt the startup.  

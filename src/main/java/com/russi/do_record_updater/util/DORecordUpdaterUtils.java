@@ -18,12 +18,14 @@ import java.util.stream.IntStream;
 @Slf4j
 public class DORecordUpdaterUtils {
 
+    private static Boolean shut = Boolean.FALSE;
+
     ObjectMapper objectMapper;
 
     ApplicationContext context;
 
     public DORecordUpdaterUtils(@Autowired ObjectMapper objectMapper,
-                                 @Autowired ApplicationContext context) {
+                                @Autowired ApplicationContext context) {
         this.objectMapper = objectMapper;
         this.context = context;
     }
@@ -33,11 +35,9 @@ public class DORecordUpdaterUtils {
         List<GenericDomainResponseDTO> genericDomainResponseDTOList = new ArrayList<>();
         JSONObject obj = new JSONObject(response);
         IntStream.range(0, obj.getJSONArray("domain_records").length())
-                .forEach(i -> {
-                    genericDomainResponseDTOList.add(convertToDomain(new JSONObject(obj.getJSONArray("domain_records")
-                            .get(i)
-                            .toString()).toString()));
-                });
+                .forEach(i -> genericDomainResponseDTOList.add(convertToDomain(new JSONObject(obj.getJSONArray("domain_records")
+                        .get(i)
+                        .toString()).toString())));
         return genericDomainResponseDTOList;
     }
 
@@ -54,11 +54,22 @@ public class DORecordUpdaterUtils {
                 .build();
     }
 
+    private static void updateShut() {
+        shut = Boolean.TRUE;
+    }
+
     public void shutdown() {
-        try {
-            SpringApplication.exit(context, () -> 0);
-        } catch (Exception e) {
-            log.error("Thread Exception");
+        if (Boolean.FALSE.equals(shut)) {
+            updateShut();
+            try {
+                SpringApplication.exit(context, () -> 0);
+            } catch (Exception e) {
+                log.error("Thread Exception");
+            }
         }
+    }
+
+    public Boolean getShut() {
+        return shut;
     }
 }

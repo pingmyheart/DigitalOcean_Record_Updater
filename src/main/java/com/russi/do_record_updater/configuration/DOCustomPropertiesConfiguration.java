@@ -8,9 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.support.CronExpression;
 
 import javax.annotation.PostConstruct;
+import java.text.MessageFormat;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Configuration
 @ConfigurationProperties(prefix = "config")
@@ -19,12 +23,12 @@ import java.util.List;
 @Slf4j
 public class DOCustomPropertiesConfiguration {
 
-    private ApplicationContext context;
+    ApplicationContext context;
 
     DORecordUpdaterUtils utils;
 
     public DOCustomPropertiesConfiguration(@Autowired ApplicationContext context,
-                                            @Autowired DORecordUpdaterUtils utils) {
+                                           @Autowired DORecordUpdaterUtils utils) {
         this.context = context;
         this.utils = utils;
     }
@@ -57,6 +61,7 @@ public class DOCustomPropertiesConfiguration {
 
     @PostConstruct
     void validate() {
+        printProjectMode();
         baseProjectConfigurationChecker();
         if (project.getUseMultiProject()) {
             multiProjectChecker();
@@ -78,10 +83,10 @@ public class DOCustomPropertiesConfiguration {
             log.error("Invalid Bearer Token");
             utils.shutdown();
         }
+        cronExpressionChecker();
     }
 
     private void multiProjectChecker() {
-        log.info("Running in multi project mode");
         if (project.getNames().contains("null")) {
             log.error("multi-project mode | domains contains \"null\" value");
             utils.shutdown();
@@ -95,7 +100,6 @@ public class DOCustomPropertiesConfiguration {
     }
 
     private void singleProjectChecker() {
-        log.info("Running in single project mode");
         if (!project.getName()
                 .contains(".")) {
             log.error("single-project mode | project is not a valid resource");
@@ -103,5 +107,32 @@ public class DOCustomPropertiesConfiguration {
         }
     }
 
+    private void cronExpressionChecker() {
+        AtomicReference<CronExpression> exp = new AtomicReference<>();
+        Optional.ofNullable(schedule.getUpdateCron())
+                .ifPresentOrElse(cron -> {
+                            if (Boolean.FALSE.equals(CronExpression.isValidExpression(cron))) {
+                                log.error("cron expression is not valid");
+                                utils.shutdown();
+                            } else {
+                                exp.set(CronExpression.parse(cron));
+                            }
+                        },
+                        () -> {
+                            log.error("cron expression can not be empty");
+                            utils.shutdown();
+                        });
+        if (Boolean.FALSE.equals(utils.getShut())) {
+            log.info(MessageFormat.format("Application started with {0} cron expression", schedule.getUpdateCron()));
+        }
+    }
+
+    private void printProjectMode() {
+        if (project.getUseMultiProject()) {
+            log.info("Running in multi project mode");
+        } else {
+            log.info("Running in single project mode");
+        }
+    }
 
 }
