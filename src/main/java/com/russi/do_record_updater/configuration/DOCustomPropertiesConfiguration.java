@@ -1,5 +1,6 @@
 package com.russi.do_record_updater.configuration;
 
+import com.russi.do_record_updater.util.CronUtils;
 import com.russi.do_record_updater.util.DORecordUpdaterUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +15,6 @@ import javax.annotation.PostConstruct;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Configuration
 @ConfigurationProperties(prefix = "config")
@@ -27,10 +27,14 @@ public class DOCustomPropertiesConfiguration {
 
     DORecordUpdaterUtils utils;
 
+    CronUtils cronUtils;
+
     public DOCustomPropertiesConfiguration(@Autowired ApplicationContext context,
-                                           @Autowired DORecordUpdaterUtils utils) {
+                                           @Autowired DORecordUpdaterUtils utils,
+                                           @Autowired CronUtils cronUtils) {
         this.context = context;
         this.utils = utils;
+        this.cronUtils = cronUtils;
     }
 
     private Authentication authentication;
@@ -74,8 +78,9 @@ public class DOCustomPropertiesConfiguration {
         authentication.setBearerToken(authentication.getBearerToken()
                 .trim());
         if (authentication.getBearerToken()
-                .contains("Bearer")) {
-            log.error("Bearer token must not contains Bearer prefix");
+                .toLowerCase()
+                .contains("bearer")) {
+            log.error("Bearer token must not contains \"Bearer\" prefix");
             utils.shutdown();
         }
         if (authentication.getBearerToken()
@@ -88,12 +93,12 @@ public class DOCustomPropertiesConfiguration {
 
     private void multiProjectChecker() {
         if (project.getNames().contains("null")) {
-            log.error("multi-project mode | domains contains \"null\" value");
+            log.error("Multi-Project Mode | Domains contains \"null\" value");
             utils.shutdown();
         }
         project.getNames().forEach(domain -> {
             if (!domain.contains(".")) {
-                log.error("multi-project mode | project is not a valid resource");
+                log.error("Multi-Project Mode | Project is not a valid resource");
                 utils.shutdown();
             }
         });
@@ -102,20 +107,17 @@ public class DOCustomPropertiesConfiguration {
     private void singleProjectChecker() {
         if (!project.getName()
                 .contains(".")) {
-            log.error("single-project mode | project is not a valid resource");
+            log.error("Single-Project Mode | Project is not a valid resource");
             utils.shutdown();
         }
     }
 
     private void cronExpressionChecker() {
-        AtomicReference<CronExpression> exp = new AtomicReference<>();
         Optional.ofNullable(schedule.getUpdateCron())
                 .ifPresentOrElse(cron -> {
                             if (Boolean.FALSE.equals(CronExpression.isValidExpression(cron))) {
                                 log.error("cron expression is not valid");
                                 utils.shutdown();
-                            } else {
-                                exp.set(CronExpression.parse(cron));
                             }
                         },
                         () -> {
@@ -123,15 +125,15 @@ public class DOCustomPropertiesConfiguration {
                             utils.shutdown();
                         });
         if (Boolean.FALSE.equals(utils.getShut())) {
-            log.info(MessageFormat.format("Application started with {0} cron expression", schedule.getUpdateCron()));
+            log.info(MessageFormat.format("Application started with \"{0}\" cron expression", cronUtils.describeCron(schedule.getUpdateCron())));
         }
     }
 
     private void printProjectMode() {
         if (project.getUseMultiProject()) {
-            log.info("Running in multi project mode");
+            log.info("Running in Multi-Project Mode");
         } else {
-            log.info("Running in single project mode");
+            log.info("Running in Single-Project Mode");
         }
     }
 
