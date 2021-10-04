@@ -2,6 +2,7 @@ package com.russi.do_record_updater.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.russi.do_record_updater.dto.response.GenericDomainResponseDTO;
+import com.russi.do_record_updater.function.JsonDomainConverterFunction;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -41,21 +42,8 @@ public class DORecordUpdaterUtils {
         return genericDomainResponseDTOList;
     }
 
-    @SneakyThrows
     private GenericDomainResponseDTO convertToDomain(String domain) {
-
-        JSONObject obj = new JSONObject(domain);
-        return GenericDomainResponseDTO.builder()
-                .id(obj.getLong("id"))
-                .data(obj.getString("data"))
-                .name(obj.getString("name"))
-                .ttl(obj.getInt("ttl"))
-                .type(obj.getString("type"))
-                .build();
-    }
-
-    private static void updateShut() {
-        shut = Boolean.TRUE;
+        return new JsonDomainConverterFunction().apply(domain);
     }
 
     public void shutdown() {
@@ -71,5 +59,9 @@ public class DORecordUpdaterUtils {
 
     public Boolean getShut() {
         return shut;
+    }
+
+    private static void updateShut() {
+        shut = Boolean.TRUE;
     }
 }

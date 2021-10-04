@@ -58,7 +58,7 @@ public class DORecordUpdaterImpl implements DORecordUpdater {
             }
             genericDomainResponseDTOList.addAll(doRecordUpdaterUtils.parseDomainsFromResponse(response));
             index++;
-        } while (Boolean.TRUE.equals(jsonUtils.hasNext(response)));
+        } while (Boolean.TRUE.equals(jsonUtils.containsNext(response)));
 
         return RetrieveDomainsResponseDTO.builder()
                 .domainRecords(genericDomainResponseDTOList)

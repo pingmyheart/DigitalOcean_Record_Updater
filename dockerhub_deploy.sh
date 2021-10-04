@@ -8,6 +8,8 @@ function generate_and_publish {
   echo -e "Publishing image..."
   docker push "$image_name"
   echo -e "Image published"
+  echo -e "Removing locally..."
+  docker rmi "$image_name"
   apt moo moo moo
 }
 
