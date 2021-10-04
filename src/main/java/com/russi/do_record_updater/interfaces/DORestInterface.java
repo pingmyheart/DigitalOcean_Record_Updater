@@ -22,7 +22,7 @@ public interface DORestInterface {
     String getPagedDomains(@RequestHeader(HttpHeaders.AUTHORIZATION) String bearer,
                            @PathVariable String baseDomain,
                            @RequestParam Integer page,
-                           @RequestParam Integer per_page);
+                           @RequestParam(name = "per_page") Integer perPage);
 
     @PutMapping("/v2/domains/{baseDomain}/records/{recordId}")
     String updateRecord(@RequestHeader(HttpHeaders.AUTHORIZATION) String bearer,

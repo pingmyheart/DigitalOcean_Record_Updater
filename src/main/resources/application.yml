@@ -12,7 +12,7 @@ server:
   shutdown: graceful
 spring:
   application:
-    name: DORecordUpdater-ms
+    name: digitalocean-record-updater-ms
   banner:
     image:
       invert: false
