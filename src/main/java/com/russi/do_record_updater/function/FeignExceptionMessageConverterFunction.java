@@ -1,5 +1,6 @@
 package com.russi.do_record_updater.function;
 
+import com.russi.do_record_updater.util.ExceptionUtils;
 import feign.FeignException;
 import lombok.SneakyThrows;
 import org.springframework.boot.configurationprocessor.json.JSONException;
@@ -9,7 +10,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
+import static com.russi.do_record_updater.util.DOKeys.MESSAGE;
+
 public class FeignExceptionMessageConverterFunction implements Function<FeignException, String> {
+
+    ExceptionUtils exceptionUtils = new ExceptionUtils();
 
     @SneakyThrows
     @Override
@@ -21,6 +26,10 @@ public class FeignExceptionMessageConverterFunction implements Function<FeignExc
                         .toString()
                         .replaceAll("(?m)^\\s+$", "")
                         .trim()));
+        if (exceptionUtils.isInSocketTimeoutException(feignException)
+                .get()) {
+            return "Digital Ocean spent too much time to retrieve a response";
+        }
         JSONObject response;
         try {
             response = new JSONObject(message.get());
@@ -29,7 +38,7 @@ public class FeignExceptionMessageConverterFunction implements Function<FeignExc
         }
         if (response.toString()
                 .contains("\"message\"")) {
-            return response.getString("message");
+            return response.getString(MESSAGE.getValue());
         }
         return null;
     }

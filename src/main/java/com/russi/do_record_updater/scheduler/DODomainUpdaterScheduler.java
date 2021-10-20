@@ -7,7 +7,6 @@ import com.russi.do_record_updater.dto.response.GenericDomainResponseDTO;
 import com.russi.do_record_updater.util.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +15,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.russi.do_record_updater.util.Constants.ipAddress;
+import static com.russi.do_record_updater.util.DOKeys.RecordType;
 
 @Component
 @Slf4j
@@ -25,27 +25,25 @@ public class DODomainUpdaterScheduler {
 
     DOCustomPropertiesConfiguration properties;
 
-    @Value("${config.authentication.bearer-token}")
     String bearerToken;
-
-    @Value("${config.project.name}")
-    String baseDomain;
 
     public DODomainUpdaterScheduler(@Autowired DORecordUpdaterImpl doRecordUpdater,
                                     @Autowired DOCustomPropertiesConfiguration properties) {
         this.doRecordUpdater = doRecordUpdater;
         this.properties = properties;
+        this.bearerToken = properties.getAuthentication()
+                .getBearerToken();
     }
 
     @Scheduled(cron = "${config.schedule.update-cron}")
     void scheduledUpdateRecord() {
         if (Boolean.FALSE.equals(properties.getProject().getUseMultiProject())) {
-            Optional.ofNullable(doRecordUpdater.getAllDomains(baseDomain))
+            Optional.ofNullable(doRecordUpdater.getAllDomains(properties.getProject().getName()))
                     .ifPresentOrElse(obj -> obj.getDomainRecords()
                                     .stream()
-                                    .filter(o -> o.getType().equals("A"))
+                                    .filter(o -> o.getType().equals(RecordType.A.getValue()))
                                     .collect(Collectors.toList())
-                                    .forEach(e -> checkAndUpdate(e, baseDomain, e.getName())),
+                                    .forEach(e -> checkAndUpdate(e, properties.getProject().getName(), e.getName())),
                             () -> log.error("Error while retrieving records"));
         } else {
             properties.getProject()
@@ -53,7 +51,7 @@ public class DODomainUpdaterScheduler {
                     .forEach(domain -> Optional.ofNullable(doRecordUpdater.getAllDomains(domain))
                             .ifPresentOrElse(obj -> obj.getDomainRecords()
                                             .stream()
-                                            .filter(o -> o.getType().equals("A"))
+                                            .filter(o -> o.getType().equals(RecordType.A.getValue()))
                                             .collect(Collectors.toList())
                                             .forEach(e -> checkAndUpdate(e, domain, e.getName(), domain)),
                                     () -> log.error(MessageFormat.format("Error while retrieving domain records for {0}", domain))));

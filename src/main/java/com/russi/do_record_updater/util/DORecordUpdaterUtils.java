@@ -13,13 +13,16 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.IntStream;
+
+import static com.russi.do_record_updater.util.DOKeys.DOMAIN_RECORDS;
 
 @Component
 @Slf4j
 public class DORecordUpdaterUtils {
 
-    private static Boolean shut = Boolean.FALSE;
+    private static final AtomicReference<Boolean> shut = new AtomicReference<>(Boolean.FALSE);
 
     ObjectMapper objectMapper;
 
@@ -31,12 +34,16 @@ public class DORecordUpdaterUtils {
         this.context = context;
     }
 
+    private static void updateShut() {
+        shut.set(Boolean.TRUE);
+    }
+
     @SneakyThrows
     public List<GenericDomainResponseDTO> parseDomainsFromResponse(String response) {
         List<GenericDomainResponseDTO> genericDomainResponseDTOList = new ArrayList<>();
         JSONObject obj = new JSONObject(response);
-        IntStream.range(0, obj.getJSONArray("domain_records").length())
-                .forEach(i -> genericDomainResponseDTOList.add(convertToDomain(new JSONObject(obj.getJSONArray("domain_records")
+        IntStream.range(0, obj.getJSONArray(DOMAIN_RECORDS.getValue()).length())
+                .forEach(i -> genericDomainResponseDTOList.add(convertToDomain(new JSONObject(obj.getJSONArray(DOMAIN_RECORDS.getValue())
                         .get(i)
                         .toString()).toString())));
         return genericDomainResponseDTOList;
@@ -47,7 +54,7 @@ public class DORecordUpdaterUtils {
     }
 
     public void shutdown() {
-        if (Boolean.FALSE.equals(shut)) {
+        if (Boolean.FALSE.equals(shut.get())) {
             updateShut();
             try {
                 SpringApplication.exit(context, () -> 0);
@@ -58,10 +65,6 @@ public class DORecordUpdaterUtils {
     }
 
     public Boolean getShut() {
-        return shut;
-    }
-
-    private static void updateShut() {
-        shut = Boolean.TRUE;
+        return shut.get();
     }
 }

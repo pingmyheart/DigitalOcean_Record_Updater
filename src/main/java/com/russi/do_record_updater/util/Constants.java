@@ -18,9 +18,10 @@ import java.util.List;
 @Slf4j
 public class Constants {
 
+    public static String ipAddress;
+    public static List<String> domains = new ArrayList<>();
     static DORecordUpdaterUtils utils;
     static DOCustomPropertiesConfiguration configuration;
-    public static String ipAddress;
 
     public Constants(@Autowired DOCustomPropertiesConfiguration customPropertiesConfiguration,
                      @Autowired DORecordUpdaterUtils updaterUtils,
@@ -33,13 +34,6 @@ public class Constants {
         }
         ipAddress = ipInfoInterface.getIp();
     }
-
-    @PostConstruct
-    void init() {
-        log.info(MessageFormat.format("Current public IP is {0}", ipAddress));
-    }
-
-    public static List<String> domains = new ArrayList<>();
 
     public static void checkDomainsConfiguration() {
         if (!domains.isEmpty()) {
@@ -56,6 +50,11 @@ public class Constants {
             log.error("Domain args can not be empty");
             utils.shutdown();
         }
+    }
+
+    @PostConstruct
+    void init() {
+        log.info(MessageFormat.format("Current public IP is {0}", ipAddress));
     }
 
     private boolean isNetAvailable() {
