@@ -1,5 +1,6 @@
 package com.russi.do_record_updater.component;
 
+import com.russi.do_record_updater.configuration.DOCustomPropertiesConfiguration;
 import com.russi.do_record_updater.dto.request.UpdateRecordRequestDTO;
 import com.russi.do_record_updater.dto.response.GenericDomainResponseDTO;
 import com.russi.do_record_updater.dto.response.RetrieveDomainsResponseDTO;
@@ -10,7 +11,6 @@ import com.russi.do_record_updater.util.DORecordUpdaterUtils;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.text.MessageFormat;
@@ -27,15 +27,17 @@ public class DORecordUpdaterImpl implements DORecordUpdater {
 
     DOJsonUtils jsonUtils;
 
-    @Value("${config.authentication.bearer-token}")
     String bearerToken;
 
     public DORecordUpdaterImpl(@Autowired DORestInterface doRestInterface,
                                @Autowired DORecordUpdaterUtils doRecordUpdaterUtils,
-                               @Autowired DOJsonUtils jsonUtils) {
+                               @Autowired DOJsonUtils jsonUtils,
+                               @Autowired DOCustomPropertiesConfiguration config) {
         this.doRestInterface = doRestInterface;
         this.doRecordUpdaterUtils = doRecordUpdaterUtils;
         this.jsonUtils = jsonUtils;
+        this.bearerToken = config.getAuthentication()
+                .getBearerToken();
     }
 
     @Override

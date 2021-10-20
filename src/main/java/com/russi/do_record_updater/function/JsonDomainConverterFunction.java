@@ -5,17 +5,20 @@ import org.json.JSONObject;
 
 import java.util.function.Function;
 
+import static com.russi.do_record_updater.util.DOKeys.*;
+
+
 public class JsonDomainConverterFunction implements Function<String, GenericDomainResponseDTO> {
 
     @Override
     public GenericDomainResponseDTO apply(String s) {
         JSONObject obj = new JSONObject(s);
         return GenericDomainResponseDTO.builder()
-                .id(obj.getLong("id"))
-                .data(obj.getString("data"))
-                .name(obj.getString("name"))
-                .ttl(obj.getInt("ttl"))
-                .type(obj.getString("type"))
+                .id(obj.getLong(ID.getValue()))
+                .data(obj.getString(DATA.getValue()))
+                .name(obj.getString(NAME.getValue()))
+                .ttl(obj.getInt(TTL.getValue()))
+                .type(obj.getString(TYPE.getValue()))
                 .build();
     }
 }

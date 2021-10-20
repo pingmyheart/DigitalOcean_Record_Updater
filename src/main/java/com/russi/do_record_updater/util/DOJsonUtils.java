@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
+import static com.russi.do_record_updater.util.DOKeys.*;
+
 /**
  * Component class for Json Utility Functions
  *
@@ -25,7 +27,7 @@ public class DOJsonUtils {
     @SneakyThrows
     @Deprecated(since = "1.3.8")
     public Boolean hasNext(String response) {
-        return new JSONObject(response).getJSONObject("links")
+        return new JSONObject(response).getJSONObject(LINKS.getValue())
                 .toString()
                 .contains("\"next\"");
     }
@@ -37,14 +39,9 @@ public class DOJsonUtils {
      * @return {@code true} if response has next link or else {@code false}
      */
     public Boolean containsNext(String response) {
-        if (new JSONObject(response).getJSONObject("links")
-                .has("pages")) {
-            if (new JSONObject(response).getJSONObject("links")
-                    .getJSONObject("pages")
-                    .has("next")) {
-                return Boolean.TRUE;
-            }
-        }
-        return Boolean.FALSE;
+        JSONObject jsonObject = new JSONObject(response).getJSONObject(LINKS.getValue());
+        return jsonObject.has(PAGES.getValue()) &&
+                jsonObject.getJSONObject(PAGES.getValue()).has(NEXT.getValue()) ?
+                Boolean.TRUE : Boolean.FALSE;
     }
 }

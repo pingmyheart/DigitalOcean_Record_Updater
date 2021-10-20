@@ -20,7 +20,8 @@ going to be deployed.
 Basically, DigitalOcean Record Updater works
 with [DigitalOcean API](https://docs.digitalocean.com/reference/api/api-reference/)
 to update **type A DNS records** retrieving the current public ip address and updating it to a set of domains passed to
-the application through a scheduled cron settled into **application.yml** file.
+the application through a scheduled cron settled into **application.yml** file.  
+Released images are also available on [DockerHub](https://hub.docker.com/r/pingmyheart/digitalocean_record_updater) 
 
 ## How it works
 
@@ -73,8 +74,8 @@ java -jar -Dspring.profiles.active=prod DO_Record_Updater-version.jar arecord br
 
 ### Run in multi-project mode
 
-To run the application in multiple project mode, it is necessary to explicitly set *use-multi-project* property to *
-true*. It is necessary to set the project names list property, multi-project flag and DigitalOcean read/write permission
+To run the application in multiple project mode, it is necessary to explicitly set *use-multi-project* property to 
+*true*. It is necessary to set the project names list property, multi-project flag and DigitalOcean read/write permission
 Bearer Token as following
 
 ```properties

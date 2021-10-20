@@ -24,10 +24,13 @@ import java.util.Optional;
 public class DOCustomPropertiesConfiguration {
 
     ApplicationContext context;
-
     DORecordUpdaterUtils utils;
-
     CronUtils cronUtils;
+
+    private Authentication authentication;
+    private Project project;
+    private String publicIpSiteResolver;
+    private Schedule schedule;
 
     public DOCustomPropertiesConfiguration(@Autowired ApplicationContext context,
                                            @Autowired DORecordUpdaterUtils utils,
@@ -35,32 +38,6 @@ public class DOCustomPropertiesConfiguration {
         this.context = context;
         this.utils = utils;
         this.cronUtils = cronUtils;
-    }
-
-    private Authentication authentication;
-    private Project project;
-    private String publicIpSiteResolver;
-    private Schedule schedule;
-
-    @Getter
-    @Setter
-    public static class Authentication {
-
-        private String bearerToken;
-    }
-
-    @Getter
-    @Setter
-    public static class Project {
-        private String name;
-        private List<String> names;
-        private Boolean useMultiProject = Boolean.FALSE;
-    }
-
-    @Getter
-    @Setter
-    public static class Schedule {
-        private String updateCron;
     }
 
     @PostConstruct
@@ -135,6 +112,27 @@ public class DOCustomPropertiesConfiguration {
         } else {
             log.info("Running in Single-Project Mode");
         }
+    }
+
+    @Getter
+    @Setter
+    public static class Authentication {
+
+        private String bearerToken;
+    }
+
+    @Getter
+    @Setter
+    public static class Project {
+        private String name;
+        private List<String> names;
+        private Boolean useMultiProject = Boolean.FALSE;
+    }
+
+    @Getter
+    @Setter
+    public static class Schedule {
+        private String updateCron;
     }
 
 }
