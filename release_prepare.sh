@@ -30,5 +30,5 @@ git checkout develop
 next_release="${release%.*}.$((${release##*.}+1))"
 mvn versions:set versions:commit -DnewVersion="${next_release}"
 git add pom.xml
-git commit -m "[UPDATE] pom.xml project version from v${release} to v${next_release}"
+git commit -m "[AUTO] - Update pom.xml project version from v${release} to v${next_release}"
 git push origin develop
