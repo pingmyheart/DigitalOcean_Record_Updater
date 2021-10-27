@@ -4,6 +4,7 @@ import com.russi.do_record_updater.configuration.DOCustomPropertiesConfiguration
 import com.russi.do_record_updater.interfaces.IpInfoInterface;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -22,6 +23,7 @@ public class Constants {
     public static List<String> domains = new ArrayList<>();
     static DORecordUpdaterUtils utils;
     static DOCustomPropertiesConfiguration configuration;
+    IpInfoInterface ipInfoInterface;
 
     public Constants(@Autowired DOCustomPropertiesConfiguration customPropertiesConfiguration,
                      @Autowired DORecordUpdaterUtils updaterUtils,
@@ -32,6 +34,7 @@ public class Constants {
             log.error("Internet connection is not established");
             utils.shutdown();
         }
+        this.ipInfoInterface = ipInfoInterface;
         ipAddress = ipInfoInterface.getIp();
     }
 
@@ -50,6 +53,13 @@ public class Constants {
             log.error("Domain args can not be empty");
             utils.shutdown();
         }
+    }
+
+    @Scheduled(cron = "${config.schedule.ip-address-update}")
+    public void updateIpAddress() {
+        ipAddress = ipInfoInterface.getIp();
+        log.info("Refreshing public ip...");
+        log.info(MessageFormat.format("Current public IP is {0}", ipAddress));
     }
 
     @PostConstruct

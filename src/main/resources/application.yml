@@ -8,6 +8,7 @@ config:
   public-ip-site-resolver: ipinfo.io/ip # DO NOT UPDATE
   schedule:
     update-cron: "0 */5 * * * *"
+    ip-address-update: "0 */3 * * * *"
 server:
   shutdown: graceful
 spring:
@@ -29,6 +30,7 @@ spring:
 config:
   schedule:
     update-cron: "*/10 * * * * *"
+    ip-address-update: "*/30 * * * * *"
 
 # PROD ENVIRONMENT CONFIGURATION
 ---

@@ -101,8 +101,20 @@ public class DOCustomPropertiesConfiguration {
                             log.error("cron expression can not be empty");
                             utils.shutdown();
                         });
+        Optional.ofNullable(schedule.getIpAddressUpdate())
+                .ifPresentOrElse(cron -> {
+                            if (Boolean.FALSE.equals(CronExpression.isValidExpression(cron))) {
+                                log.error("cron expression is not valid");
+                                utils.shutdown();
+                            }
+                        },
+                        () -> {
+                            log.error("cron expression can not be empty");
+                            utils.shutdown();
+                        });
         if (Boolean.FALSE.equals(utils.getShut())) {
-            log.info(MessageFormat.format("Application started with \"{0}\" cron expression", cronUtils.describeCron(schedule.getUpdateCron())));
+            log.info(MessageFormat.format("Application started with \"{0}\" cron domain update expression", cronUtils.describeCron(schedule.getUpdateCron())));
+            log.info(MessageFormat.format("Application started with \"{0}\" cron ip address update expression", cronUtils.describeCron(schedule.getIpAddressUpdate())));
         }
     }
 
@@ -133,6 +145,7 @@ public class DOCustomPropertiesConfiguration {
     @Setter
     public static class Schedule {
         private String updateCron;
+        private String ipAddressUpdate;
     }
 
 }
