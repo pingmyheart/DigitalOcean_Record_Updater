@@ -4,7 +4,7 @@ function generate_and_publish {
   echo -e "Image does not exists\nBuilding maven project..."
   mvn -U clean package install -DskipTests
   echo -e "Creating image..."
-  docker build -t "$image_name" .
+  docker buildx build --platform linux/amd64,linux/arm build -t "$image_name" .
   echo -e "Publishing image..."
   docker push "$image_name"
   echo -e "Image published"
