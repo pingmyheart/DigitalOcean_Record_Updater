@@ -1,7 +1,13 @@
 # DigitalOcean Record Updater
 
-[![Build Status](https://travis-ci.org/codecentric/springboot-sample-app.svg?branch=master)](https://travis-ci.org/codecentric/springboot-sample-app)
-[![Coverage Status](https://coveralls.io/repos/github/codecentric/springboot-sample-app/badge.svg?branch=master)](https://coveralls.io/github/codecentric/springboot-sample-app?branch=master)
+![Last Commit](https://img.shields.io/github/last-commit/pingmyheart/Kubernetes-Fast-Environment-Switcher)
+![Repo Size](https://img.shields.io/github/repo-size/pingmyheart/Kubernetes-Fast-Environment-Switcher)
+![Issues](https://img.shields.io/github/issues/pingmyheart/Kubernetes-Fast-Environment-Switcher)
+![Pull Requests](https://img.shields.io/github/issues-pr/pingmyheart/Kubernetes-Fast-Environment-Switcher)
+![License](https://img.shields.io/github/license/pingmyheart/Kubernetes-Fast-Environment-Switcher)
+![Top Language](https://img.shields.io/github/languages/top/pingmyheart/Kubernetes-Fast-Environment-Switcher)
+![Language Count](https://img.shields.io/github/languages/count/pingmyheart/Kubernetes-Fast-Environment-Switcher)
+
 
 ## Requirements
 
