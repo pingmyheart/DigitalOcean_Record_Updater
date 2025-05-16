@@ -1,12 +1,12 @@
 # DigitalOcean Record Updater
 
-![Last Commit](https://img.shields.io/github/last-commit/pingmyheart/Kubernetes-Fast-Environment-Switcher)
-![Repo Size](https://img.shields.io/github/repo-size/pingmyheart/Kubernetes-Fast-Environment-Switcher)
-![Issues](https://img.shields.io/github/issues/pingmyheart/Kubernetes-Fast-Environment-Switcher)
-![Pull Requests](https://img.shields.io/github/issues-pr/pingmyheart/Kubernetes-Fast-Environment-Switcher)
-![License](https://img.shields.io/github/license/pingmyheart/Kubernetes-Fast-Environment-Switcher)
-![Top Language](https://img.shields.io/github/languages/top/pingmyheart/Kubernetes-Fast-Environment-Switcher)
-![Language Count](https://img.shields.io/github/languages/count/pingmyheart/Kubernetes-Fast-Environment-Switcher)
+![Last Commit](https://img.shields.io/github/last-commit/pingmyheart/DigitalOcean_Record_Updater)
+![Repo Size](https://img.shields.io/github/repo-size/pingmyheart/DigitalOcean_Record_Updater)
+![Issues](https://img.shields.io/github/issues/pingmyheart/DigitalOcean_Record_Updater)
+![Pull Requests](https://img.shields.io/github/issues-pr/pingmyheart/DigitalOcean_Record_Updater)
+![License](https://img.shields.io/github/license/pingmyheart/DigitalOcean_Record_Updater)
+![Top Language](https://img.shields.io/github/languages/top/pingmyheart/DigitalOcean_Record_Updater)
+![Language Count](https://img.shields.io/github/languages/count/pingmyheart/DigitalOcean_Record_Updater)
 
 
 ## Requirements
