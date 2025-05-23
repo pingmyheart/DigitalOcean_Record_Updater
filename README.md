@@ -36,10 +36,10 @@ can work in both the scenarios in fact, depending on a property configured into 
 to run the application in multi-project mode or in single project mode. The property, settled false by default, is the
 following
 
-```properties
+```yaml
 config:
     project:
-        use-multi-project:false
+        use-multi-project: false
 ```
 
 ### Run in single-project mode
@@ -48,12 +48,12 @@ To run the application in single project mode, it is necessary to check if *use-
 false or if it is completely absent(by default it is settled to *false*).  
 It is necessary to set the project name property and DigitalOcean read/write permission Bearer Token as following
 
-```properties
+```yaml
 config:
     authentication:
-        bearer-token:digital_ocean_token
+        bearer-token: digital_ocean_token
     project:
-        name:example.com
+        name: example.com
 ```
 
 If those fields are not settled, the application will interrupt the startup.  
@@ -84,10 +84,10 @@ To run the application in multiple project mode, it is necessary to explicitly s
 *true*. It is necessary to set the project names list property, multi-project flag and DigitalOcean read/write permission
 Bearer Token as following
 
-```properties
+```yaml
 config:
   authentication:
-    bearer-token:digital_ocean_token
+    bearer-token: digital_ocean_token
   project:
     names:
       - example.com
@@ -142,7 +142,7 @@ environment variables depending on witch mode is going to be deployed, so
 
 To deploy in single-project mode, the docker-compose file will look like following
 
-```properties
+```yaml
 version: '3.1'
 services:
   dns_updater_ms:
@@ -160,7 +160,7 @@ services:
 
 or, in multi-project mode
 
-```properties
+```yaml
 version: '3.1'
 services:
   dns_updater_ms:
