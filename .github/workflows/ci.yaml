@@ -29,6 +29,7 @@ jobs:
         id: extract_version
         run: |
           VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Build with Maven
@@ -41,12 +42,18 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build Docker image
-        run: |
-          IMAGE_TAG=ghcr.io/${{ github.repository }}:${{ steps.extract_version.outputs.version }}
-          docker build -t $IMAGE_TAG .
+      - name: Set up Docker image metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            ${{ env.VERSION }}
 
-      - name: Push Docker image
-        run: |
-          IMAGE_TAG=ghcr.io/${{ github.repository }}:${{ steps.extract_version.outputs.version }}
-          docker push $IMAGE_TAG
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
