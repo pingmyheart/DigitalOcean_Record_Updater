@@ -1,4 +1,5 @@
 FROM amazoncorretto:11
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "app.jar"]
+WORKDIR /opt
+COPY target/*.jar /opt/app.jar
+
+ENTRYPOINT ["java", "-Dfile.encoding=UTF-8", "-Dspring.config.additional-location=/config/", "-jar", "/opt/app.jar"]
