@@ -1,7 +1,12 @@
 # DigitalOcean Record Updater
 
-[![Build Status](https://travis-ci.org/codecentric/springboot-sample-app.svg?branch=master)](https://travis-ci.org/codecentric/springboot-sample-app)
-[![Coverage Status](https://coveralls.io/repos/github/codecentric/springboot-sample-app/badge.svg?branch=master)](https://coveralls.io/github/codecentric/springboot-sample-app?branch=master)
+![Last Commit](https://img.shields.io/github/last-commit/pingmyheart/DigitalOcean-Record-Updater)
+![Repo Size](https://img.shields.io/github/repo-size/pingmyheart/DigitalOcean-Record-Updater)
+![Issues](https://img.shields.io/github/issues/pingmyheart/DigitalOcean-Record-Updater)
+![Pull Requests](https://img.shields.io/github/issues-pr/pingmyheart/DigitalOcean-Record-Updater)
+![License](https://img.shields.io/github/license/pingmyheart/DigitalOcean-Record-Updater)
+![Top Language](https://img.shields.io/github/languages/top/pingmyheart/DigitalOcean-Record-Updater)
+![Language Count](https://img.shields.io/github/languages/count/pingmyheart/DigitalOcean-Record-Updater)
 
 ## Requirements
 
