@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -48,9 +49,13 @@ public class DigitalOceanRecordUpdaterImpl implements DigitalOceanRecordUpdater 
             } catch (FeignException feignException) {
                 log.error(new FeignExceptionMessageConverterFunction()
                         .apply(feignException));
-                return null;
+                return RetrieveDomainsResponseDTO.builder()
+                        .domainRecords(Collections.emptyList())
+                        .build();
             } catch (Exception e) {
-                return null;
+                return RetrieveDomainsResponseDTO.builder()
+                        .domainRecords(Collections.emptyList())
+                        .build();
             }
             genericDomainResponseDTOList.addAll(digitalOceanRecordUpdaterUtils.parseDomainsFromResponse(response));
             index++;
