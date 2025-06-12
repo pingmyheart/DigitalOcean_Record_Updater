@@ -1,4 +1,4 @@
-FROM amazoncorretto:11
+FROM amazoncorretto:21
 WORKDIR /opt
 COPY target/*.jar /opt/app.jar
 

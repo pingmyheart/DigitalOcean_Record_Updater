@@ -1,16 +1,17 @@
 package io.github.pingmyheart.digitaloceanrecordupdater.component;
 
 import feign.FeignException;
-import io.github.pingmyheart.digitaloceanrecordupdater.configuration.DOCustomPropertiesConfiguration;
 import io.github.pingmyheart.digitaloceanrecordupdater.dto.request.UpdateRecordRequestDTO;
 import io.github.pingmyheart.digitaloceanrecordupdater.dto.response.GenericDomainResponseDTO;
 import io.github.pingmyheart.digitaloceanrecordupdater.dto.response.RetrieveDomainsResponseDTO;
 import io.github.pingmyheart.digitaloceanrecordupdater.function.FeignExceptionMessageConverterFunction;
-import io.github.pingmyheart.digitaloceanrecordupdater.interfaces.DORestInterface;
-import io.github.pingmyheart.digitaloceanrecordupdater.util.DOJsonUtils;
-import io.github.pingmyheart.digitaloceanrecordupdater.util.DORecordUpdaterUtils;
+import io.github.pingmyheart.digitaloceanrecordupdater.interfaces.DigitalOceanRestInterface;
+import io.github.pingmyheart.digitaloceanrecordupdater.properties.DigitalOceanRecordUpdaterProperties;
+import io.github.pingmyheart.digitaloceanrecordupdater.util.DigitalOceanJsonUtils;
+import io.github.pingmyheart.digitaloceanrecordupdater.util.DigitalOceanRecordUpdaterUtils;
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.text.MessageFormat;
@@ -18,26 +19,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 @Slf4j
-public class DORecordUpdaterImpl implements DORecordUpdater {
+public class DigitalOceanRecordUpdaterImpl implements DigitalOceanRecordUpdater {
 
-    DORestInterface doRestInterface;
+    private final DigitalOceanRestInterface digitalOceanRestInterface;
+    private final DigitalOceanRecordUpdaterProperties properties;
+    private final DigitalOceanRecordUpdaterUtils digitalOceanRecordUpdaterUtils;
+    private final DigitalOceanJsonUtils jsonUtils;
+    private String bearerToken;
 
-    DORecordUpdaterUtils doRecordUpdaterUtils;
-
-    DOJsonUtils jsonUtils;
-
-    String bearerToken;
-
-    public DORecordUpdaterImpl(@Autowired DORestInterface doRestInterface,
-                               @Autowired DORecordUpdaterUtils doRecordUpdaterUtils,
-                               @Autowired DOJsonUtils jsonUtils,
-                               @Autowired DOCustomPropertiesConfiguration config) {
-        this.doRestInterface = doRestInterface;
-        this.doRecordUpdaterUtils = doRecordUpdaterUtils;
-        this.jsonUtils = jsonUtils;
-        this.bearerToken = config.getAuthentication()
-                .getBearerToken();
+    @PostConstruct
+    void init() {
+        this.bearerToken = properties.getAuthentication().getDigitalOceanToken();
     }
 
     @Override
@@ -47,7 +41,7 @@ public class DORecordUpdaterImpl implements DORecordUpdater {
         int index = 1;
         do {
             try {
-                response = doRestInterface.getPagedDomains(MessageFormat.format("Bearer {0}", bearerToken),
+                response = digitalOceanRestInterface.getPagedDomains(MessageFormat.format("Bearer {0}", bearerToken.replaceAll("[Bb]earer", "")),
                         base,
                         index,
                         20);
@@ -58,7 +52,7 @@ public class DORecordUpdaterImpl implements DORecordUpdater {
             } catch (Exception e) {
                 return null;
             }
-            genericDomainResponseDTOList.addAll(doRecordUpdaterUtils.parseDomainsFromResponse(response));
+            genericDomainResponseDTOList.addAll(digitalOceanRecordUpdaterUtils.parseDomainsFromResponse(response));
             index++;
         } while (Boolean.TRUE.equals(jsonUtils.containsNext(response)));
 
@@ -68,9 +62,11 @@ public class DORecordUpdaterImpl implements DORecordUpdater {
     }
 
     @Override
-    public Boolean updateRecord(String recordId, UpdateRecordRequestDTO updateRecordRequestDTO, String base) {
+    public Boolean updateRecord(String recordId,
+                                UpdateRecordRequestDTO updateRecordRequestDTO,
+                                String base) {
         try {
-            doRestInterface.updateRecord(MessageFormat.format("Bearer {0}", bearerToken),
+            digitalOceanRestInterface.updateRecord(MessageFormat.format("Bearer {0}", bearerToken.replaceAll("[Bb]earer", "")),
                     base,
                     recordId,
                     updateRecordRequestDTO);

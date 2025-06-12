@@ -1,4 +1,4 @@
-package io.github.pingmyheart.digitaloceanrecordupdater.util;
+package io.github.pingmyheart.digitaloceanrecordupdater.enumerated;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public enum DOKeys {
+public enum DigitalOceanKeysEnum {
 
     DOMAIN_RECORDS(1, "domain_records"),
     LINKS(2, "links"),

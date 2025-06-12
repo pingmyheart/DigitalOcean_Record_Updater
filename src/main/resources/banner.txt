@@ -1,0 +1,4 @@
+    ${AnsiColor.CYAN}Microservice${AnsiColor.DEFAULT} :: ${AnsiStyle.ITALIC}${AnsiColor.BRIGHT_YELLOW}${info.app.artifact:unknown}${AnsiColor.DEFAULT}${AnsiStyle.NORMAL}
+    ${AnsiColor.CYAN}Version${AnsiColor.DEFAULT} :: ${AnsiStyle.BOLD}${AnsiColor.BRIGHT_WHITE}${info.app.version:unknown}${AnsiColor.DEFAULT}${AnsiStyle.NORMAL}
+    ${AnsiColor.CYAN}Running profile${AnsiColor.DEFAULT} :: ${AnsiStyle.BOLD}${AnsiColor.BRIGHT_WHITE}${spring.profiles.active:default}${AnsiColor.DEFAULT}${AnsiStyle.NORMAL}
+    ${AnsiColor.CYAN}Spring Boot Version${AnsiColor.DEFAULT} :: ${AnsiStyle.BOLD}${AnsiColor.BRIGHT_WHITE}${spring-boot.version}${AnsiColor.DEFAULT}${AnsiStyle.NORMAL}

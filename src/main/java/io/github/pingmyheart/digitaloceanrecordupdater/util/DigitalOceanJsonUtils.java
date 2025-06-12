@@ -5,9 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
-import static io.github.pingmyheart.digitaloceanrecordupdater.util.DOKeys.LINKS;
-import static io.github.pingmyheart.digitaloceanrecordupdater.util.DOKeys.NEXT;
-import static io.github.pingmyheart.digitaloceanrecordupdater.util.DOKeys.PAGES;
+import static io.github.pingmyheart.digitaloceanrecordupdater.enumerated.DigitalOceanKeysEnum.LINKS;
+import static io.github.pingmyheart.digitaloceanrecordupdater.enumerated.DigitalOceanKeysEnum.NEXT;
+import static io.github.pingmyheart.digitaloceanrecordupdater.enumerated.DigitalOceanKeysEnum.PAGES;
 
 /**
  * Component class for Json Utility Functions
@@ -16,7 +16,7 @@ import static io.github.pingmyheart.digitaloceanrecordupdater.util.DOKeys.PAGES;
  */
 @Slf4j
 @Component
-public class DOJsonUtils {
+public class DigitalOceanJsonUtils {
 
     /**
      * Verify if a domain response from DigitalOcean contains next link to get other paged responses

@@ -1,47 +1,20 @@
-config:
-  authentication:
-    bearer-token: ${BEARER_TOKEN:null}
-  project:
-    name: ${PROJECT_NAME:null}
-    names: ${PROJECT_NAMES:null}
-    use-multi-project: ${MULTIPROJECT_ENABLED:false}
-  public-ip-site-resolver: ipinfo.io/ip # DO NOT UPDATE
-  schedule:
-    update-cron: "0 */5 * * * *"
-    ip-address-update: "0 */3 * * * *"
-server:
-  shutdown: graceful
 spring:
   application:
-    name: digitalocean-record-updater-ms
-  banner:
-    image:
-      invert: false
-      pixelmode: block
-      bitdepth: 8
-      location: classpath:banner.png
+    name: digitalocean-record-updater
+server:
+  shutdown: graceful
+io:
+  github:
+    pingmyheart:
+      digitaloceanrecordupdater:
+        authentication:
+          digital-ocean-token: ${BEARER_TOKEN:null}
+        scheduling:
+          digital-ocean-sync: "0 * * * * *"
+          public-ip-sync: "0 */3 * * * *"
 
-# TEST ENVIRONMENT CONFIGURATION
----
-spring:
-  config:
-    activate:
-      on-profile: test
-config:
-  schedule:
-    update-cron: "*/10 * * * * *"
-    ip-address-update: "*/30 * * * * *"
-
-# PROD ENVIRONMENT CONFIGURATION
----
-spring:
-  config:
-    activate:
-      on-profile: prod
-  banner:
-    image:
-      location: classpath:banner_prod.png
-  devtools:
-    livereload:
-      enabled: false
-    add-properties: false
+info:
+  app:
+    artifact: "@project.artifactId@"
+    name: "@project.name@"
+    version: "@project.version@"

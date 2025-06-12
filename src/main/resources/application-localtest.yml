@@ -1,0 +1,10 @@
+io:
+  github:
+    pingmyheart:
+      digitaloceanrecordupdater:
+        projects:
+          - domain: russi.ovh
+            hostnames:
+              - test1
+              - test2
+              - test3

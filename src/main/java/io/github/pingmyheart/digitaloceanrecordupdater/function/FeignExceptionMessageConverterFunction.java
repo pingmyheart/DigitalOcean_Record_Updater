@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
-import static io.github.pingmyheart.digitaloceanrecordupdater.util.DOKeys.MESSAGE;
+import static io.github.pingmyheart.digitaloceanrecordupdater.enumerated.DigitalOceanKeysEnum.MESSAGE;
 
 public class FeignExceptionMessageConverterFunction implements Function<FeignException, String> {
 
@@ -26,8 +26,8 @@ public class FeignExceptionMessageConverterFunction implements Function<FeignExc
                         .toString()
                         .replaceAll("(?m)^\\s+$", "")
                         .trim()));
-        if (exceptionUtils.isInSocketTimeoutException(feignException)
-                .get()) {
+        if (Boolean.TRUE.equals(exceptionUtils.isInSocketTimeoutException(feignException)
+                .get())) {
             return "Digital Ocean spent too much time to retrieve a response";
         }
         JSONObject response;

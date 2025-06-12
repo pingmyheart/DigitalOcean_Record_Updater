@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name = "DO-Rest-Interface",
         url = "https://api.digitalocean.com")
-public interface DORestInterface {
+public interface DigitalOceanRestInterface {
 
     @GetMapping("/v2/domains/{baseDomain}/records")
     String getDomains(@RequestHeader(HttpHeaders.AUTHORIZATION) String bearer,

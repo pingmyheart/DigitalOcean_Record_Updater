@@ -1,12 +1,11 @@
 package io.github.pingmyheart.digitaloceanrecordupdater.util;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.pingmyheart.digitaloceanrecordupdater.dto.response.GenericDomainResponseDTO;
 import io.github.pingmyheart.digitaloceanrecordupdater.function.JsonDomainConverterFunction;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -16,23 +15,15 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.IntStream;
 
-import static io.github.pingmyheart.digitaloceanrecordupdater.util.DOKeys.DOMAIN_RECORDS;
+import static io.github.pingmyheart.digitaloceanrecordupdater.enumerated.DigitalOceanKeysEnum.DOMAIN_RECORDS;
 
 @Component
+@RequiredArgsConstructor
 @Slf4j
-public class DORecordUpdaterUtils {
+public class DigitalOceanRecordUpdaterUtils {
 
     private static final AtomicReference<Boolean> shut = new AtomicReference<>(Boolean.FALSE);
-
-    ObjectMapper objectMapper;
-
-    ApplicationContext context;
-
-    public DORecordUpdaterUtils(@Autowired ObjectMapper objectMapper,
-                                @Autowired ApplicationContext context) {
-        this.objectMapper = objectMapper;
-        this.context = context;
-    }
+    private final ApplicationContext context;
 
     private static void updateShut() {
         shut.set(Boolean.TRUE);

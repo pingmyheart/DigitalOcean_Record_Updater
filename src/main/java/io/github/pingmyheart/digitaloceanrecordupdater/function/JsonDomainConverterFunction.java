@@ -5,11 +5,11 @@ import org.json.JSONObject;
 
 import java.util.function.Function;
 
-import static io.github.pingmyheart.digitaloceanrecordupdater.util.DOKeys.DATA;
-import static io.github.pingmyheart.digitaloceanrecordupdater.util.DOKeys.ID;
-import static io.github.pingmyheart.digitaloceanrecordupdater.util.DOKeys.NAME;
-import static io.github.pingmyheart.digitaloceanrecordupdater.util.DOKeys.TTL;
-import static io.github.pingmyheart.digitaloceanrecordupdater.util.DOKeys.TYPE;
+import static io.github.pingmyheart.digitaloceanrecordupdater.enumerated.DigitalOceanKeysEnum.DATA;
+import static io.github.pingmyheart.digitaloceanrecordupdater.enumerated.DigitalOceanKeysEnum.ID;
+import static io.github.pingmyheart.digitaloceanrecordupdater.enumerated.DigitalOceanKeysEnum.NAME;
+import static io.github.pingmyheart.digitaloceanrecordupdater.enumerated.DigitalOceanKeysEnum.TTL;
+import static io.github.pingmyheart.digitaloceanrecordupdater.enumerated.DigitalOceanKeysEnum.TYPE;
 
 
 public class JsonDomainConverterFunction implements Function<String, GenericDomainResponseDTO> {
