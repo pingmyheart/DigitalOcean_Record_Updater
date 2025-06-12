@@ -20,4 +20,4 @@ jobs:
     uses: pingmyheart/Ping-Actions/.github/workflows/dispatcher.yml@main
     with:
       project-type: docker-maven
-      java-version: 11
+      java-version: 21
