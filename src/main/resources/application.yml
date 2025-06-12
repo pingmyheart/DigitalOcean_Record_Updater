@@ -10,7 +10,7 @@ io:
         authentication:
           digital-ocean-token: ${BEARER_TOKEN:null}
         scheduling:
-          digital-ocean-sync: "0 * * * * *"
+          digital-ocean-sync: "0 */5 * * * *"
           public-ip-sync: "0 */3 * * * *"
 
 info:
