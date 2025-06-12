@@ -12,7 +12,7 @@
 
     <groupId>io.github.pingmyheart</groupId>
     <artifactId>digital-ocean-record-updater</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>2.0.0</version>
 
     <scm>
         <url>https://github.com/pingmyheart/DigitalOcean-Record-Updatert</url>
